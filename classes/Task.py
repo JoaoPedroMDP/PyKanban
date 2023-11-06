@@ -1,89 +1,60 @@
-
+#  coding: utf-8
 import datetime
 
+
 class Task:
-    def __init__(self, id , name, description, created, updated, moved, column):
-    #  Para quando pegar do banco de dados
+    def __init__(
+            self, name: str, column_id: int,
+            id: int = None, created: int = None, updated: int = None,
+            moved: int = None
+    ):
         self.id = id
-        self.name = name
-        self.description = description
-        self.column = column
+        self._name = name
+        self._column_id = column_id
 
-        self.created = created
-        self.updated = updated
-        self.moved = moved
+        self.created = created if created else datetime.datetime.now()
+        self.updated = updated if updated else datetime.datetime.now()
+        self.moved = moved if moved else datetime.datetime.now()
 
-    def __init__(self, name, description, column):
-        #  Para quando criar nova task
-        self.name = name
-        self.description = description
-        self.column = column
+    def __str__(self):
+        return f"Task(id={self.id}, name={self.name}, column_id={self.column_id}, created={self.created}, " \
+               f"updated={self.updated}, moved={self.moved})"
 
-        self.created = datetime.datetime.now()
-        self.updated = datetime.datetime.now()
+    @classmethod
+    def from_dict(cls, data: dict):
+        return cls(
+            id=data["id"],
+            name=data["name"],
+            column_id=data["column_id"],
+            created=data["created"] if "created" in data else datetime.datetime.now(),
+            updated=data["updated"] if "updated" in data else datetime.datetime.now(),
+            moved=data["moved"] if "moved" in data else datetime.datetime.now()
+        )
+
+    @property
+    def name(self):
+        return self._name
+
+    @property
+    def column_id(self):
+        return self._column_id
+
+    @column_id.setter
+    def column_id(self, value):
+        self._column_id = value
+        self.touch()
         self.moved = datetime.datetime.now()
 
-    def __init__(self, name, column):
-        #  Para quando criar nova task sem descrição
-        self.name = name
-        self.description = ''
-        self.column = column
-
-        self.created = datetime.datetime.now()
-        self.updated = datetime.datetime.now()
-        self.moved = datetime.datetime.now()
-
-    # GETTERS
-    def getId(self):
-        return self.id
-
-    def getName(self):
-        return self.name
-
-    def getDescription(self):
-        return self.description
-
-    def getCreated(self):
-        return self.created
-
-    def getUpdated(self):
-        return self.updated
-
-    def getMoved(self):
-        return self.moved
-
-    def getColumn(self):
-        return self.column
-
-    # SETTERS
-    def setId(self, id):
-        self.id = id
-
-    def setName(self, name):
+    @name.setter
+    def name(self, value):
+        self._name = value
         self.touch()
-        self.name = name
-
-    def setDescription(self, description):
-        self.touch()
-        self.description = description
-
-    def setCreated(self, created):
-        self.created = created
-
-    def setUpdated(self, updated):
-        self.updated = updated
-
-    def setMoved(self, moved):
-        self.moved = moved
-
-    def setColumn(self, column):
-        self.column = column
 
     # METHODS
     def touch(self):
         self.updated = datetime.datetime.now()
 
-    def move(self, column):
-        self.column = column
+    def move(self, column_id: int):
+        self.column_id = column_id
         self.touch()
         self.moved = datetime.datetime.now()

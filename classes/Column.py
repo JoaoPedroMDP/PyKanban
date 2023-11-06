@@ -1,54 +1,43 @@
 import datetime
+from typing import List
+
+from classes.Task import Task
+
 
 class Column:
-    def __init__(self, id, name, tasks, table):
+    def __init__(self, id: int, name: str, tasks: List[Task], table_id: int):
         self.id = id
         self.name = name
         self.tasks = tasks
-        self.table = table
+        self.table_id = table_id
 
-    def __init__(self, name, tasks, table):
-        self.name = name
-        self.tasks = tasks
-        self.table = table
+    def __str__(self):
+        return f"Column(id={self.id}, name={self.name}, tasks={self.tasks}, table_id={self.table_id})"
 
-    # GETTERS
-    def getId(self):
-        return self.id
+    @classmethod
+    def from_dict(cls, data: dict):
+        return cls(
+            id=data["id"],
+            name=data["name"],
+            tasks=[Task.from_dict(task) for task in data["tasks"]],
+            table_id=data["table_id"]
+        )
 
-    def getName(self):
-        return self.name
-
-    def getTasks(self):
-        return self.tasks
-
-    def getTable(self):
-        return self.table
-
-    # SETTERS
-    def setId(self, id):
-        self.id = id
-
-    def setName(self, name):
-        self.name = name
-
-    def setTasks(self, tasks):
-        self.tasks = tasks
-
-    def setTable(self, table):
-        self.table = table
-
-    # METHODS
-    def addTask(self, task):
+    def add_task(self, task: Task):
         self.tasks.append(task)
         task.move(self)
 
-    def sendTask(self, task, column):
+    def send_task(self, task: Task, column: 'Column') -> None:
         self.tasks.remove(task)
-        column.addTask(task)
+        column.add_task(task)
 
-    def getStaleTasks(self, days):
+    def get_stale_tasks(self, days) -> List[Task]:
         # Retorna todas as tasks que já estão numa mesma coluna há mais de 'days' dias
         now = datetime.datetime.now()
-        stale_tasks = [task for task in self.tasks if (task.getMoved() + datetime.timedelta(days=days) < now)]
+        stale_tasks = []
+        for task in self.tasks:
+            task_moved_datetime = datetime.datetime.fromtimestamp(task.moved)
+            if (now - task_moved_datetime).days >= days:
+                stale_tasks.append(task)
+
         return stale_tasks

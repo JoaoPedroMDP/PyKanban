@@ -1,55 +1,30 @@
+from typing import List
+
+from classes.Column import Column
+
 
 class Table:
-    def __init__(self, id, name, description, columns, user):
-       #  Para quando pegar do banco de dados
+    def __init__(self, id: int, name: str, user_id: int, columns: List[Column]):
         self.id = id
         self.name = name
-        self.description = description
         self.columns = columns
-        self.user = user
+        self.user_id = user_id
 
-    def __init__(self, name, description, columns, user):
-       #  Para quando pegar do banco de dados
-        self.name = name
-        self.description = description
-        self.columns = columns
-        self.user = user
+    def __str__(self):
+        return f"Table(id={self.id}, name={self.name}, user_id={self.user_id}, columns={self.columns})"
 
-    # GETTERS
-    def getId(self):
-        return self.id
-
-    def getName(self):
-        return self.name
-
-    def getDescription(self):
-        return self.description
-
-    def getColumns(self):
-        return self.columns
-
-    def getUser(self):
-        return self.user
-
-    # SETTERS
-    def setId(self, id):
-        self.id = id
-
-    def setName(self, name):
-        self.name = name
-
-    def setDescription(self, description):
-        self.description = description
-
-    def setColumns(self, columns):
-        self.columns = columns
-
-    def setUser(self, user):
-        self.user = user
+    @classmethod
+    def from_dict(cls, data: dict):
+        return cls(
+            id=data["id"],
+            name=data["name"],
+            user_id=data["user_id"],
+            columns=[Column.from_dict(column) for column in data["columns"]]
+        )
 
     # METHODS
-    def addColumn(self, column):
+    def add_column(self, column):
         self.columns.append(column)
 
-    def removeColumn(self, column):
+    def remove_column(self, column):
         self.columns.remove(column)
