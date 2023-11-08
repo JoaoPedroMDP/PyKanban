@@ -1,11 +1,16 @@
 #  coding: utf-8
+import json
+import pickle
+
+from PyQt5.QtCore import Qt, QByteArray
 from PyQt5.QtWidgets import QMainWindow, QListWidget, QListWidgetItem, QVBoxLayout, QHBoxLayout, QLabel, QFrame
 from PyQt5.uic import loadUi
 
 from classes.Column import Column
 from classes.Table import Table
 from classes.Task import Task
-from memory import TABLES
+from classes.qt_customizations.qt_column import QtColumn
+from memory import TABLES, TMP
 from screens.raw_screens.TableScreen import Ui_TableScreen
 
 
@@ -56,14 +61,19 @@ class TableScreen(QMainWindow, Ui_TableScreen):
     def create_column(self, column: Column):
         column_frame = QFrame(self.table)
         column_layout = QVBoxLayout(column_frame)
+        column_layout.setContentsMargins(0, 0, 0, 0)
 
-        new_column = QListWidget(self.table)
+        new_column = QtColumn(self.table, column)
         for task in column.tasks:
             print("Adicionando task" + task.name)
             new_item = QListWidgetItem(task.name, new_column)
+            new_item.setData(Qt.UserRole, json.dumps({"task": task.to_dict()}))
             new_column.addItem(new_item)
 
         column_header = QLabel(column.name, new_column)
+        column_header.setStyleSheet("font-size: 20px; font-weight: bold;")
+
         column_layout.addWidget(column_header)
         column_layout.addWidget(new_column)
+        column_layout.setAlignment(column_header, Qt.AlignHCenter)
         return column_frame

@@ -20,6 +20,19 @@ class Task:
         return f"Task(id={self.id}, name={self.name}, column_id={self.column_id}, created={self.created}, " \
                f"updated={self.updated}, moved={self.moved})"
 
+    def __repr__(self):
+        return self.__str__()
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "column_id": self.column_id,
+            "created": self.created.strftime("%Y-%m-%d %H:%M:%S"),
+            "updated": self.updated.strftime("%Y-%m-%d %H:%M:%S"),
+            "moved": self.moved.strftime("%Y-%m-%d %H:%M:%S")
+        }
+
     @classmethod
     def from_dict(cls, data: dict):
         return cls(
