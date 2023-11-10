@@ -1,23 +1,22 @@
 #  coding: utf-8
-import json
-import pickle
 
-from PyQt5.QtCore import Qt, QByteArray
-from PyQt5.QtWidgets import QMainWindow, QListWidget, QListWidgetItem, QVBoxLayout, QHBoxLayout, QLabel, QFrame
+from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QMainWindow, QVBoxLayout, QHBoxLayout, QLabel, QFrame, QScrollArea
 from PyQt5.uic import loadUi
 
-from classes.Column import Column
-from classes.Table import Table
-from classes.Task import Task
-from classes.qt_customizations.qt_column import QtColumn
-from memory import TABLES, TMP
-from screens.raw_screens.TableScreen import Ui_TableScreen
+from classes.pure.Column import Column
+from classes.pure.Table import Table
+from classes.pure.Task import Task
+from memory import get_tables_from_user_id
+from qt_uis.screens.raw_screens.TableScreen import Ui_TableScreen
+from qt_uis.widgets.column_widget import ColumnWidget
+from qt_uis.widgets.task_widget import TaskWidget
 
 
 class TableScreen(QMainWindow, Ui_TableScreen):
     def __init__(self, navigator, data: dict):
         super(TableScreen, self).__init__()
-        loadUi("screens/raw_screens/TableScreen.ui", self)
+        loadUi("qt_uis/screens/raw_screens/TableScreen.ui", self)
         self.navigator = navigator
         self.create_task_button.released.connect(self.create_task)
         self.data = data
@@ -28,7 +27,7 @@ class TableScreen(QMainWindow, Ui_TableScreen):
         self.update_table()
 
     def get_tables(self):
-        tables = list(filter(lambda item: item["user_id"] == self.data["user"]["id"], TABLES))
+        tables = get_tables_from_user_id(self.data["user"]["id"])
         return [Table.from_dict(data) for data in tables]
 
     def create_task(self):
@@ -48,6 +47,7 @@ class TableScreen(QMainWindow, Ui_TableScreen):
             print("Adicionando coluna" + column.name)
             new_column = self.create_column(column)
             self.table_layout.addWidget(new_column)
+            # self.table.setMinimumWidth(self.table.width() + new_column.width())
 
         self.table.update()
 
@@ -59,21 +59,11 @@ class TableScreen(QMainWindow, Ui_TableScreen):
                 widget.deleteLater()
 
     def create_column(self, column: Column):
-        column_frame = QFrame(self.table)
-        column_layout = QVBoxLayout(column_frame)
-        column_layout.setContentsMargins(0, 0, 0, 0)
+        new_column: ColumnWidget = ColumnWidget(column, self.table)
 
-        new_column = QtColumn(self.table, column)
         for task in column.tasks:
             print("Adicionando task" + task.name)
-            new_item = QListWidgetItem(task.name, new_column)
-            new_item.setData(Qt.UserRole, json.dumps({"task": task.to_dict()}))
-            new_column.addItem(new_item)
+            new_item = TaskWidget(task, new_column)
+            new_column.add_task(new_item)
 
-        column_header = QLabel(column.name, new_column)
-        column_header.setStyleSheet("font-size: 20px; font-weight: bold;")
-
-        column_layout.addWidget(column_header)
-        column_layout.addWidget(new_column)
-        column_layout.setAlignment(column_header, Qt.AlignHCenter)
-        return column_frame
+        return new_column

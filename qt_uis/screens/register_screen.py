@@ -11,7 +11,7 @@ class RegisterScreen(QMainWindow):
     def __init__(self, navigator, data: dict):
         super(RegisterScreen, self).__init__()
         self.navigator = navigator
-        loadUi("screens/raw_screens/RegisterScreen.ui", self)
+        loadUi("qt_uis/screens/raw_screens/RegisterScreen.ui", self)
         self.register_button.released.connect(self.register)
         self.back_to_login_button.released.connect(lambda: self.navigator.navigate("login"))
 

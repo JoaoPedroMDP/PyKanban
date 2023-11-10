@@ -1,7 +1,8 @@
 import datetime
 from typing import List
 
-from classes.Task import Task
+from classes.pure.Task import Task
+from memory import get_tasks_from_column_id
 
 
 class Column:
@@ -19,7 +20,7 @@ class Column:
         return cls(
             id=data["id"],
             name=data["name"],
-            tasks=[Task.from_dict(task) for task in data["tasks"]],
+            tasks=[Task.from_dict(x) for x in get_tasks_from_column_id(data["id"])],
             table_id=data["table_id"]
         )
 

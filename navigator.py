@@ -1,9 +1,9 @@
 #  coding: utf-8
 from PyQt5.QtWidgets import QStackedWidget
 
-from screens.LoginScreen import LoginScreen
-from screens.RegisterScreen import RegisterScreen
-from screens.TableScreen import TableScreen
+from qt_uis.screens.login_screen import LoginScreen
+from qt_uis.screens.register_screen import RegisterScreen
+from qt_uis.screens.table_screen import TableScreen
 
 
 class Navigator:

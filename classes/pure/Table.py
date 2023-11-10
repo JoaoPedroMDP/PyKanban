@@ -1,6 +1,7 @@
 from typing import List
 
-from classes.Column import Column
+from classes.pure.Column import Column
+from memory import get_columns_from_table_id
 
 
 class Table:
@@ -19,7 +20,7 @@ class Table:
             id=data["id"],
             name=data["name"],
             user_id=data["user_id"],
-            columns=[Column.from_dict(column) for column in data["columns"]]
+            columns=[Column.from_dict(x) for x in get_columns_from_table_id(data["id"])]
         )
 
     # METHODS

@@ -5,13 +5,13 @@ from PyQt5.QtWidgets import QMainWindow
 from PyQt5.uic import loadUi
 
 from memory import USERS
-from screens.raw_screens.LoginScreen import Ui_LoginScreen
+from qt_uis.screens.raw_screens.LoginScreen import Ui_LoginScreen
 
 
 class LoginScreen(QMainWindow, Ui_LoginScreen):
     def __init__(self, navigator, data: dict):
         super(LoginScreen, self).__init__()
-        loadUi("screens/raw_screens/LoginScreen.ui", self)
+        loadUi("qt_uis/screens/raw_screens/LoginScreen.ui", self)
         self.navigator = navigator
         self.confirm_button.released.connect(self.login)
         self.register_button.released.connect(lambda: self.navigator.navigate("register"))
