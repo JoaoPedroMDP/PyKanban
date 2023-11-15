@@ -23,17 +23,20 @@ COLUMNS = [
     {
         "id": 0,
         "name": "A fazer",
-        "table_id": 0
+        "table_id": 0,
+        "position": 0
     },
     {
         "id": 1,
         "name": "Fazendo",
-        "table_id": 0
+        "table_id": 0,
+        "position": 1
     },
     {
         "id": 2,
         "name": "Feito",
-        "table_id": 0
+        "table_id": 0,
+        "position": 2
     }
 ]
 

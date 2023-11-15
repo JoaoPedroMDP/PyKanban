@@ -67,7 +67,7 @@ class Task:
     def touch(self):
         self.updated = datetime.datetime.now()
 
-    def move(self, column_id: int):
-        self.column_id = column_id
+    def move(self, destiny_column_id: int):
+        self.column_id = destiny_column_id
         self.touch()
         self.moved = datetime.datetime.now()

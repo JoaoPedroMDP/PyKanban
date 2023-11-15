@@ -1,4 +1,5 @@
 #  coding: utf-8
+from typing import List
 
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QMainWindow, QVBoxLayout, QHBoxLayout, QLabel, QFrame, QScrollArea
@@ -20,13 +21,13 @@ class TableScreen(QMainWindow, Ui_TableScreen):
         self.navigator = navigator
         self.create_task_button.released.connect(self.create_task)
         self.data = data
-        self.tables = self.get_tables()
-        self.opened_table = self.tables[0]
+        self.tables: List[Table] = self.get_tables()
+        self.opened_table: Table = self.tables[0]
         self.table_name.setText(self.opened_table.name)
         self.table_layout: QHBoxLayout = QHBoxLayout(self.table)
         self.update_table()
 
-    def get_tables(self):
+    def get_tables(self) -> List[Table]:
         tables = get_tables_from_user_id(self.data["user"]["id"])
         return [Table.from_dict(data) for data in tables]
 
@@ -64,6 +65,11 @@ class TableScreen(QMainWindow, Ui_TableScreen):
         for task in column.tasks:
             print("Adicionando task" + task.name)
             new_item = TaskWidget(task, new_column)
+            new_item.move_task.connect(self.move_task)
             new_column.add_task(new_item)
 
         return new_column
+
+    def move_task(self, task: Task):
+        self.opened_table.move_task_forward(task)
+        self.update_table()
