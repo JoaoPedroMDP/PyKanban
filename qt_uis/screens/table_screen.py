@@ -1,8 +1,9 @@
 #  coding: utf-8
+from threading import Thread
+from time import sleep
 from typing import List
 
-from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QMainWindow, QVBoxLayout, QHBoxLayout, QLabel, QFrame, QScrollArea
+from PyQt5.QtWidgets import QMainWindow, QHBoxLayout
 from PyQt5.uic import loadUi
 
 from classes.pure.Column import Column
@@ -26,6 +27,15 @@ class TableScreen(QMainWindow, Ui_TableScreen):
         self.table_name.setText(self.opened_table.name)
         self.table_layout: QHBoxLayout = QHBoxLayout(self.table)
         self.update_table()
+        # Adiciona uma thread que atualiza o numero de tasks pendentes a cada 5 segundos
+        thread = Thread(target=self.update_idle_tasks)
+        thread.start()
+
+    def update_idle_tasks(self):
+        while True:
+            idle_tasks_count = self.opened_table.get_idle_task_count()
+            self.statusBar().showMessage(str(idle_tasks_count))
+            sleep(1)
 
     def get_tables(self) -> List[Table]:
         tables = get_tables_from_user_id(self.data["user"]["id"])

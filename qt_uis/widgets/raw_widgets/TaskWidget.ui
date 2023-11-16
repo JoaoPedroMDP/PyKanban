@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>129</width>
-    <height>27</height>
+    <width>436</width>
+    <height>95</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -66,7 +66,7 @@
    <item>
     <widget class="QPushButton" name="send_task_button">
      <property name="sizePolicy">
-      <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>

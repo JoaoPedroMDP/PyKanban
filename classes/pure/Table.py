@@ -61,3 +61,10 @@ class Table:
         task.column_id = next_column.id
         current_column.remove_task(task)
         next_column.add_task(task)
+
+    def get_idle_task_count(self):
+        count = 0
+        for column in self.columns:
+            count += column.get_idle_task_count()
+
+        return count

@@ -45,3 +45,11 @@ class Column:
 
     def remove_task(self, task: Task):
         self.tasks.remove(task)
+
+    def get_idle_task_count(self):
+        count = 0
+        for task in self.tasks:
+            if task.is_idle():
+                count += 1
+
+        return count

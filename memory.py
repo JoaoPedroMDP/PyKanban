@@ -1,5 +1,18 @@
 #  coding: utf-8
 
+
+def get_users():
+    return USERS
+
+
+def get_tables():
+    return TABLES
+
+
+def get_columns():
+    return COLUMNS
+
+
 USERS = [
     {
         "id": 0,
@@ -13,7 +26,7 @@ USERS = [
 TABLES = [
     {
         "id": 0,
-        "name": "Escola",
+        "name": "Exemplo",
         "user_id": 0,
     }
 ]

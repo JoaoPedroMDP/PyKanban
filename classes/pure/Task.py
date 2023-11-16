@@ -1,6 +1,8 @@
 #  coding: utf-8
 import datetime
 
+from config import IDLE_SECONDS_THRESHOLD
+
 
 class Task:
     def __init__(
@@ -71,3 +73,8 @@ class Task:
         self.column_id = destiny_column_id
         self.touch()
         self.moved = datetime.datetime.now()
+
+    def is_idle(self):
+        now = datetime.datetime.now()
+        moved_datetime = datetime.datetime.fromtimestamp(self.moved.timestamp())
+        return (now - moved_datetime).seconds >= IDLE_SECONDS_THRESHOLD
