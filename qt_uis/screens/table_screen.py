@@ -3,15 +3,18 @@ from threading import Thread
 from time import sleep
 from typing import List
 
-from PyQt5.QtWidgets import QMainWindow, QHBoxLayout
+from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QMainWindow, QHBoxLayout, QLabel, QVBoxLayout
 from PyQt5.uic import loadUi
 
 from classes.pure.Column import Column
 from classes.pure.Table import Table
 from classes.pure.Task import Task
+from consts import FORWARD
 from memory import get_tables_from_user_id
 from qt_uis.screens.raw_screens.TableScreen import Ui_TableScreen
 from qt_uis.widgets.column_widget import ColumnWidget
+from qt_uis.widgets.table_list_item_widget import TableListItemWidget
 from qt_uis.widgets.task_widget import TaskWidget
 
 
@@ -26,10 +29,28 @@ class TableScreen(QMainWindow, Ui_TableScreen):
         self.opened_table: Table = self.tables[0]
         self.table_name.setText(self.opened_table.name)
         self.table_layout: QHBoxLayout = QHBoxLayout(self.table)
+        self.populate_table_list()
+        self.create_table_button.released.connect(lambda: self.navigator.navigate("new_table"))
         self.update_table()
         # Adiciona uma thread que atualiza o numero de tasks pendentes a cada 5 segundos
         thread = Thread(target=self.update_idle_tasks)
         thread.start()
+
+    def populate_table_list(self):
+        vertical_layout = QVBoxLayout(self.table_list)
+        vertical_layout.setSpacing(2)
+        vertical_layout.setContentsMargins(0, 2, 0, 2)
+        vertical_layout.setAlignment(Qt.AlignTop)
+
+        for table in self.tables:
+            table_item = TableListItemWidget(table)
+            table_item.set_table.connect(self.change_table)
+            vertical_layout.addWidget(table_item)
+
+    def change_table(self, table: Table):
+        self.opened_table = table
+        self.table_name.setText(table.name)
+        self.update_table()
 
     def update_idle_tasks(self):
         while True:
@@ -38,7 +59,7 @@ class TableScreen(QMainWindow, Ui_TableScreen):
             sleep(1)
 
     def get_tables(self) -> List[Table]:
-        tables = get_tables_from_user_id(self.data["user"]["id"])
+        tables = get_tables_from_user_id(self.navigator.user["id"])
         return [Table.from_dict(data) for data in tables]
 
     def create_task(self):
@@ -80,6 +101,6 @@ class TableScreen(QMainWindow, Ui_TableScreen):
 
         return new_column
 
-    def move_task(self, task: Task):
-        self.opened_table.move_task_forward(task)
+    def move_task(self, task: Task, direction: int):
+        self.opened_table.move_task(task, direction)
         self.update_table()

@@ -1,4 +1,5 @@
 #  coding: utf-8
+from typing import List
 
 
 def get_users():
@@ -11,6 +12,28 @@ def get_tables():
 
 def get_columns():
     return COLUMNS
+
+
+def create_column(name: str, table_id: int, position: int):
+    column = {
+        "id": len(COLUMNS),
+        "name": name,
+        "table_id": table_id,
+        "position": position
+    }
+    COLUMNS.append(column)
+
+
+def create_table(name: str, columns: List[str], user_id: int):
+    table = {
+        "id": len(TABLES),
+        "name": name,
+        "user_id": user_id
+    }
+    TABLES.append(table)
+
+    for i, column_name in enumerate(columns):
+        create_column(column_name, table["id"], i)
 
 
 USERS = [

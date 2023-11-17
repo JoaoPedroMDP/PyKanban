@@ -22,7 +22,7 @@ class ColumnWidget(QWidget, Ui_ColumnWidget):
         self.list_layout.setSpacing(2)
         self.list_layout.setContentsMargins(0, 2, 0, 2)
         self.list_layout.setAlignment(Qt.AlignTop)
-        self.tasks_scroll_area.setSizeAdjustPolicy(QScrollArea.AdjustToContents)
 
     def add_task(self, task: TaskWidget):
         self.list_layout.addWidget(task)
+        # self.setMinimumWidth(task.width())

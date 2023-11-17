@@ -5,10 +5,9 @@ from PyQt5.QtWidgets import QMainWindow
 from PyQt5.uic import loadUi
 
 from memory import USERS
-from qt_uis.screens.raw_screens.LoginScreen import Ui_LoginScreen
 
 
-class LoginScreen(QMainWindow, Ui_LoginScreen):
+class LoginScreen(QMainWindow):
     def __init__(self, navigator, data: dict):
         super(LoginScreen, self).__init__()
         loadUi("qt_uis/screens/raw_screens/LoginScreen.ui", self)
@@ -38,4 +37,5 @@ class LoginScreen(QMainWindow, Ui_LoginScreen):
             self.set_status_bar("Senha incorreta")
             return
 
-        self.navigator.navigate("table", {"user": user})
+        self.navigator.login_user(user)
+        self.navigator.navigate("table")

@@ -160,4 +160,5 @@ cython_debug/
 .idea/
 
 **/raw_screens/*.py
+**/raw_widgets/*.py
 config.py

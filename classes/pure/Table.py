@@ -2,6 +2,7 @@ from typing import List
 
 from classes.pure.Column import Column
 from classes.pure.Task import Task
+from consts import BACKWARD, FORWARD
 from memory import get_columns_from_table_id
 
 
@@ -45,14 +46,14 @@ class Table:
 
         return None
 
-    def move_task_forward(self, task: Task):
+    def move_task(self, task: Task, direction: int):
         """
         Avança a Task passada para a próxima coluna.
         Se a Task estiver na última coluna, destrói
         """
         current_column_id = task.column_id
         current_column: Column = self.get_column_by_id(current_column_id)
-        next_position = current_column.position + 1
+        next_position = current_column.position + direction
         if next_position >= len(self.columns):
             current_column.remove_task(task)
             return
@@ -61,6 +62,12 @@ class Table:
         task.column_id = next_column.id
         current_column.remove_task(task)
         next_column.add_task(task)
+
+    def move_task_forward(self, task: Task):
+        self.move_task(task, FORWARD)
+
+    def move_task_backward(self, task: Task):
+        self.move_task(task, BACKWARD)
 
     def get_idle_task_count(self):
         count = 0
