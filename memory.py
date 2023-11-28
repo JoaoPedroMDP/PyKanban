@@ -3,50 +3,6 @@ import json
 from typing import List
 
 
-def get_users():
-    return USERS
-
-
-def get_tables():
-    return TABLES
-
-
-def get_columns():
-    return COLUMNS
-
-
-def create_column(name: str, table_id: int, position: int):
-    column = {
-        "id": len(COLUMNS),
-        "name": name,
-        "table_id": table_id,
-        "position": position
-    }
-    COLUMNS.append(column)
-
-
-def create_table(name: str, columns: List[str], user_id: int):
-    table = {
-        "id": len(TABLES),
-        "name": name,
-        "user_id": user_id
-    }
-    TABLES.append(table)
-
-    for i, column_name in enumerate(columns):
-        create_column(column_name, table["id"], i)
-
-
-def create_user(name: str, login: str, password: str):
-    user = {
-        "id": len(USERS),
-        "name": name,
-        "login": login,
-        "password": password
-    }
-    USERS.append(user)
-
-
 def load_memory():
     with open("database.json", "r") as file:
         global USERS, TABLES, COLUMNS, TASKS
@@ -69,6 +25,43 @@ def save_memory():
             "tasks": TASKS
         }
         json.dump(data, file)
+
+
+def create_column(name: str, table_id: int, position: int):
+    column = {
+        "id": len(COLUMNS),
+        "name": name,
+        "table_id": table_id,
+        "position": position
+    }
+    COLUMNS.append(column)
+    save_memory()
+
+
+def create_table(name: str, columns: List[str], user_id: int):
+    table = {
+        "id": len(TABLES),
+        "name": name,
+        "user_id": user_id
+    }
+    TABLES.append(table)
+
+    for i, column_name in enumerate(columns):
+        create_column(column_name, table["id"], i)
+
+    save_memory()
+
+
+def create_user(name: str, login: str, password: str):
+    user = {
+        "id": len(USERS),
+        "name": name,
+        "login": login,
+        "password": password
+    }
+    USERS.append(user)
+
+    save_memory()
 
 
 USERS = [

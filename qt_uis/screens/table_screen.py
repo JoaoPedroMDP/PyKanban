@@ -25,10 +25,15 @@ class TableScreen(QMainWindow, HasStatusBar):
         self.create_task_button.released.connect(self.create_task)
         self.data = data
         self.tables: List[Table] = self.get_tables()
+        if not self.tables:
+            self.navigator.navigate("new_table")
+            return
+
         self.opened_table: Table = self.tables[0]
         self.table_name.setText(self.opened_table.name)
-        self.table_layout: QHBoxLayout = QHBoxLayout(self.table)
         self.populate_table_list()
+
+        self.table_layout: QHBoxLayout = QHBoxLayout(self.table)
         self.create_table_button.released.connect(lambda: self.navigator.navigate("new_table"))
         self.update_table()
         # Adiciona uma thread que atualiza o numero de tasks pendentes a cada 5 segundos
