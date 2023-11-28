@@ -4,7 +4,7 @@ from PyQt5.QtGui import QKeyEvent
 from PyQt5.QtWidgets import QMainWindow
 from PyQt5.uic import loadUi
 
-from memory import get_users
+from memory import USERS
 from qt_uis.screens import HasStatusBar
 from qt_uis.screens.raw_screens.LoginScreen import Ui_LoginScreen
 
@@ -23,7 +23,7 @@ class LoginScreen(QMainWindow, Ui_LoginScreen, HasStatusBar):
 
     def login(self):
         self.reset_status_bar()
-        user = list(filter(lambda item: item["login"] == self.login_input.text(), get_users()))
+        user = list(filter(lambda item: item["login"] == self.login_input.text(), USERS))
         if not user:
             self.set_status_bar("Usuário não encontrado")
             return
