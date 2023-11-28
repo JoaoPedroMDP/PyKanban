@@ -1,4 +1,5 @@
 #  coding: utf-8
+import json
 from typing import List
 
 
@@ -36,12 +37,46 @@ def create_table(name: str, columns: List[str], user_id: int):
         create_column(column_name, table["id"], i)
 
 
+def create_user(name: str, login: str, password: str):
+    user = {
+        "id": len(USERS),
+        "name": name,
+        "login": login,
+        "password": password
+    }
+    USERS.append(user)
+
+
+def load_memory():
+    with open("database.json", "r") as file:
+        global USERS, TABLES, COLUMNS, TASKS
+        data = json.load(file)
+        if not data:
+            return
+
+        USERS.extend(data["users"])
+        TABLES.extend(data["tables"])
+        COLUMNS.extend(data["columns"])
+        TASKS.extend(data["tasks"])
+
+
+def save_memory():
+    with open("database.json", "w") as file:
+        data = {
+            "users": USERS,
+            "tables": TABLES,
+            "columns": COLUMNS,
+            "tasks": TASKS
+        }
+        json.dump(data, file)
+
+
 USERS = [
     {
         "id": 0,
-        "name": "joao",
-        "login": "",
-        "password": ""
+        "name": "Administrador",
+        "login": "admin",
+        "password": "4dmin"
     }
 ]
 
