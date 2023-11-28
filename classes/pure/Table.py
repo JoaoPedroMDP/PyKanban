@@ -1,3 +1,6 @@
+#  coding: utf-8
+
+
 from typing import List
 
 from classes.pure.Column import Column

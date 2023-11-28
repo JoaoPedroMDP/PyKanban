@@ -25,4 +25,3 @@ class ColumnWidget(QWidget, Ui_ColumnWidget):
 
     def add_task(self, task: TaskWidget):
         self.list_layout.addWidget(task)
-        # self.setMinimumWidth(task.width())

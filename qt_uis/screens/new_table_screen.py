@@ -4,10 +4,10 @@ from PyQt5.uic import loadUi
 
 from consts import TABLE_NAME_LIMIT
 from memory import create_table
-from qt_uis.screens.raw_screens.NewTableScreen import Ui_CreateTableScreen
+from qt_uis.screens import HasStatusBar
 
 
-class NewTableScreen(QMainWindow, Ui_CreateTableScreen):
+class NewTableScreen(QMainWindow, HasStatusBar):
     def __init__(self, navigator, parent=None):
         super().__init__(parent)
         self.navigator = navigator

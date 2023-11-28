@@ -5,9 +5,10 @@ from PyQt5.uic import loadUi
 from PyQt5.uic.properties import QtCore
 
 from memory import USERS
+from qt_uis.screens import HasStatusBar
 
 
-class RegisterScreen(QMainWindow):
+class RegisterScreen(QMainWindow, HasStatusBar):
     def __init__(self, navigator, data: dict):
         super(RegisterScreen, self).__init__()
         self.navigator = navigator
@@ -18,12 +19,6 @@ class RegisterScreen(QMainWindow):
     def keyReleaseEvent(self, event: QKeyEvent):
         if event.key() == QtCore.Qt.Key.Key_Return:
             self.register()
-
-    def reset_status_bar(self):
-        self.statusbar.showMessage("")
-
-    def set_status_bar(self, text: str):
-        self.statusBar().showMessage(text)
 
     def register(self):
         new_user = {

@@ -4,21 +4,20 @@ from time import sleep
 from typing import List
 
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QMainWindow, QHBoxLayout, QLabel, QVBoxLayout
+from PyQt5.QtWidgets import QMainWindow, QHBoxLayout, QVBoxLayout
 from PyQt5.uic import loadUi
 
 from classes.pure.Column import Column
 from classes.pure.Table import Table
 from classes.pure.Task import Task
-from consts import FORWARD
 from memory import get_tables_from_user_id
-from qt_uis.screens.raw_screens.TableScreen import Ui_TableScreen
+from qt_uis.screens import HasStatusBar
 from qt_uis.widgets.column_widget import ColumnWidget
 from qt_uis.widgets.table_list_item_widget import TableListItemWidget
 from qt_uis.widgets.task_widget import TaskWidget
 
 
-class TableScreen(QMainWindow, Ui_TableScreen):
+class TableScreen(QMainWindow, HasStatusBar):
     def __init__(self, navigator, data: dict):
         super(TableScreen, self).__init__()
         loadUi("qt_uis/screens/raw_screens/TableScreen.ui", self)
@@ -33,7 +32,7 @@ class TableScreen(QMainWindow, Ui_TableScreen):
         self.create_table_button.released.connect(lambda: self.navigator.navigate("new_table"))
         self.update_table()
         # Adiciona uma thread que atualiza o numero de tasks pendentes a cada 5 segundos
-        thread = Thread(target=self.update_idle_tasks)
+        thread = Thread(target=self.update_idle_tasks_counter)
         thread.start()
 
     def populate_table_list(self):
@@ -52,7 +51,7 @@ class TableScreen(QMainWindow, Ui_TableScreen):
         self.table_name.setText(table.name)
         self.update_table()
 
-    def update_idle_tasks(self):
+    def update_idle_tasks_counter(self):
         while True:
             idle_tasks_count = self.opened_table.get_idle_task_count()
             self.statusBar().showMessage(str(idle_tasks_count))
@@ -77,7 +76,7 @@ class TableScreen(QMainWindow, Ui_TableScreen):
 
         for column in self.opened_table.columns:
             print("Adicionando coluna" + column.name)
-            new_column = self.create_column(column)
+            new_column = self.create_column_widget(column)
             self.table_layout.addWidget(new_column)
             # self.table.setMinimumWidth(self.table.width() + new_column.width())
 
@@ -90,7 +89,7 @@ class TableScreen(QMainWindow, Ui_TableScreen):
                 widget = to_delete.widget()
                 widget.deleteLater()
 
-    def create_column(self, column: Column):
+    def create_column_widget(self, column: Column):
         new_column: ColumnWidget = ColumnWidget(column, self.table)
 
         for task in column.tasks:
