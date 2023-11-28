@@ -25,10 +25,6 @@ class TableScreen(QMainWindow, HasStatusBar):
         self.create_task_button.released.connect(self.create_task)
         self.data = data
         self.tables: List[Table] = self.get_tables()
-        if not self.tables:
-            self.navigator.navigate("new_table")
-            return
-
         self.opened_table: Table = self.tables[0]
         self.table_name.setText(self.opened_table.name)
         self.populate_table_list()

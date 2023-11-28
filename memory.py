@@ -8,12 +8,14 @@ def load_memory():
         global USERS, TABLES, COLUMNS, TASKS
         data = json.load(file)
         if not data:
+            print("Não existem informações no banco de dados")
             return
 
-        USERS.extend(data["users"])
-        TABLES.extend(data["tables"])
-        COLUMNS.extend(data["columns"])
-        TASKS.extend(data["tasks"])
+        print("Carregando informações do banco de dados")
+        USERS = data["users"]
+        TABLES = data["tables"]
+        COLUMNS = data["columns"]
+        TASKS = data["tasks"]
 
 
 def save_memory():
@@ -24,7 +26,7 @@ def save_memory():
             "columns": COLUMNS,
             "tasks": TASKS
         }
-        json.dump(data, file)
+        json.dump(data, file, indent=4)
 
 
 def create_column(name: str, table_id: int, position: int):
@@ -106,36 +108,7 @@ COLUMNS = [
 
 
 TASKS = [
-    {
-        "id": 0,
-        "name": "Estudar para a prova",
-        "column_id": 0,
-    },
-    {
-        "id": 1,
-        "name": "Fazer o trabalho de LPOO",
-        "column_id": 0,
-    },
-    {
-        "id": 2,
-        "name": "Trabalho de Química",
-        "column_id": 1,
-    },
-    {
-        "id": 3,
-        "name": "Trabalho de Física",
-        "column_id": 1,
-    },
-    {
-        "id": 4,
-        "name": "Trabalho de Matemática",
-        "column_id": 2,
-    },
-    {
-        "id": 5,
-        "name": "Trabalho de Português",
-        "column_id": 2,
-    }
+
 ]
 
 
@@ -149,3 +122,10 @@ def get_columns_from_table_id(table_id: int):
 
 def get_tasks_from_column_id(column_id: int):
     return list(filter(lambda item: item["column_id"] == column_id, TASKS))
+
+
+def get_user_by_login(login: str):
+    results = list(filter(lambda item: item["login"] == login, USERS))
+    if results:
+        return results[0]
+    return None
