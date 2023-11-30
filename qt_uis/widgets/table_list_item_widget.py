@@ -3,7 +3,7 @@ from PyQt5.QtCore import pyqtSignal, Qt
 from PyQt5.QtWidgets import QWidget, QScrollArea
 from PyQt5.uic import loadUi
 
-from classes.pure.Table import Table
+from classes.pure.table import Table
 from qt_uis.widgets.raw_widgets.TableListItemWidget import Ui_TableListItemWidget
 
 

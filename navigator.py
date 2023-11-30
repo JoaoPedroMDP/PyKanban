@@ -1,7 +1,8 @@
 #  coding: utf-8
 from PyQt5.QtWidgets import QStackedWidget
 
-from memory import get_tables_from_user_id
+from classes.pure.table import Table
+from classes.pure.user import User
 from qt_uis.screens.login_screen import LoginScreen
 from qt_uis.screens.new_table_screen import NewTableScreen
 from qt_uis.screens.register_screen import RegisterScreen
@@ -20,9 +21,9 @@ class Navigator:
         self.stack = QStackedWidget()
         self.user = None
 
-    def login_user(self, user: dict):
+    def login_user(self, user: User):
         self.user = user
-        user_tables = get_tables_from_user_id(user["id"])
+        user_tables = Table.get_tables_from_user_id(user.id)
         if len(user_tables) > 0:
             self.navigate("table")
         else:
@@ -32,4 +33,4 @@ class Navigator:
         screen = self.SCREENS[screen](self, data)
         self.stack.removeWidget(self.stack.currentWidget())
         self.stack.addWidget(screen)
-        self.stack.setGeometry(self.stack.currentWidget().geometry())
+        # self.stack.setGeometry(self.stack.currentWidget().geometry())

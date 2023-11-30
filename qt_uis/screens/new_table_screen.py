@@ -2,8 +2,8 @@
 from PyQt5.QtWidgets import QMainWindow
 from PyQt5.uic import loadUi
 
+from classes.pure.table import Table
 from consts import TABLE_NAME_LIMIT
-from memory import create_table
 from qt_uis.screens import HasStatusBar
 
 
@@ -29,5 +29,5 @@ class NewTableScreen(QMainWindow, HasStatusBar):
             return
 
         columns = columns.split(",")
-        create_table(table_name, columns, self.navigator.user["id"])
+        Table.create(table_name, columns, self.navigator.user.id)
         self.navigator.navigate("table")

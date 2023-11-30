@@ -7,10 +7,9 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QMainWindow, QHBoxLayout, QVBoxLayout
 from PyQt5.uic import loadUi
 
-from classes.pure.Column import Column
-from classes.pure.Table import Table
-from classes.pure.Task import Task
-from memory import get_tables_from_user_id
+from classes.pure.column import Column
+from classes.pure.table import Table
+from classes.pure.task import Task
 from qt_uis.screens import HasStatusBar
 from qt_uis.widgets.column_widget import ColumnWidget
 from qt_uis.widgets.table_list_item_widget import TableListItemWidget
@@ -33,7 +32,7 @@ class TableScreen(QMainWindow, HasStatusBar):
         self.create_table_button.released.connect(lambda: self.navigator.navigate("new_table"))
         self.update_table()
         # Adiciona uma thread que atualiza o numero de tasks pendentes a cada 5 segundos
-        thread = Thread(target=self.update_idle_tasks_counter)
+        thread = Thread(target=self.update_idle_tasks_counter, daemon=True)
         thread.start()
 
     def populate_table_list(self):
@@ -59,8 +58,7 @@ class TableScreen(QMainWindow, HasStatusBar):
             sleep(1)
 
     def get_tables(self) -> List[Table]:
-        tables = get_tables_from_user_id(self.navigator.user["id"])
-        return [Table.from_dict(data) for data in tables]
+        return Table.get_tables_from_user_id(self.navigator.user.id)
 
     def create_task(self):
         task_title = self.create_task_text_input.text()
@@ -68,19 +66,21 @@ class TableScreen(QMainWindow, HasStatusBar):
             return
 
         table_first_column: Column = self.opened_table.columns[0]
-        task: Task = Task(task_title, table_first_column.id)
+        task: Task = Task.create(task_title, table_first_column.id)
         table_first_column.add_task(task)
         self.update_table()
 
     def update_table(self):
         self.clear_table()
+        min_width = 0
 
         for column in self.opened_table.columns:
             print("Adicionando coluna" + column.name)
             new_column = self.create_column_widget(column)
             self.table_layout.addWidget(new_column)
-            # self.table.setMinimumWidth(self.table.width() + new_column.width())
+            min_width = new_column.width()
 
+        self.table.setMinimumWidth(min_width)
         self.table.update()
 
     def clear_table(self):

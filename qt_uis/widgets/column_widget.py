@@ -3,7 +3,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QScrollArea
 from PyQt5.uic import loadUi
 
-from classes.pure.Column import Column
+from classes.pure.column import Column
 from qt_uis.widgets.raw_widgets.ColumnWidget import Ui_ColumnWidget
 from qt_uis.widgets.task_widget import TaskWidget
 

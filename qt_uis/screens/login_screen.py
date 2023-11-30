@@ -4,12 +4,11 @@ from PyQt5.QtGui import QKeyEvent
 from PyQt5.QtWidgets import QMainWindow
 from PyQt5.uic import loadUi
 
-from memory import get_user_by_login
+from classes.pure.user import User
 from qt_uis.screens import HasStatusBar
-from qt_uis.screens.raw_screens.LoginScreen import Ui_LoginScreen
 
 
-class LoginScreen(QMainWindow, Ui_LoginScreen, HasStatusBar):
+class LoginScreen(QMainWindow, HasStatusBar):
     def __init__(self, navigator, data: dict):
         super(LoginScreen, self).__init__()
         loadUi("qt_uis/screens/raw_screens/LoginScreen.ui", self)
@@ -23,14 +22,14 @@ class LoginScreen(QMainWindow, Ui_LoginScreen, HasStatusBar):
 
     def login(self):
         self.reset_status_bar()
-        user = get_user_by_login(self.login_input.text())
+        user = User.get_user_by_login(self.login_input.text())
 
         if not user:
             self.set_status_bar("Usuário não encontrado")
             return
 
         user = user
-        if user["password"] != self.password_input.text():
+        if user.password != self.password_input.text():
             self.set_status_bar("Senha incorreta")
             return
 

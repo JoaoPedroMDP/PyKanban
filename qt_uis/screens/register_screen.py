@@ -4,7 +4,7 @@ from PyQt5.QtGui import QKeyEvent
 from PyQt5.QtWidgets import QMainWindow
 from PyQt5.uic import loadUi
 
-from memory import create_user
+from classes.pure.user import User
 from qt_uis.screens import HasStatusBar
 
 
@@ -27,5 +27,5 @@ class RegisterScreen(QMainWindow, HasStatusBar):
             "password": self.password_input.text()
         }
 
-        create_user(**new_user)
+        User.create(**new_user)
         self.navigator.navigate("login")

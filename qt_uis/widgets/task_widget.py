@@ -3,7 +3,7 @@ from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QWidget
 from PyQt5.uic import loadUi
 
-from classes.pure.Task import Task
+from classes.pure.task import Task
 from consts import FORWARD, BACKWARD
 from qt_uis.widgets.raw_widgets.TaskWidget import Ui_TaskWidget
 
