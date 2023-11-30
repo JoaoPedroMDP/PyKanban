@@ -89,7 +89,6 @@ class Column(DatabaseHandler):
 
     def remove_task(self, task: Task):
         self.tasks.remove(task)
-        task.delete()
 
     def get_idle_task_count(self) -> int:
         count = 0

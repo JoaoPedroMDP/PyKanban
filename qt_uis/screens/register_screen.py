@@ -6,6 +6,7 @@ from PyQt5.uic import loadUi
 
 from classes.pure.user import User
 from qt_uis.screens import HasStatusBar
+from exceptions import ExpectedException
 
 
 class RegisterScreen(QMainWindow, HasStatusBar):
@@ -27,5 +28,10 @@ class RegisterScreen(QMainWindow, HasStatusBar):
             "password": self.password_input.text()
         }
 
-        User.create(**new_user)
+        try:
+            User.create(**new_user)
+        except ExpectedException as e:
+            self.set_status_bar(str(e))
+            return
+
         self.navigator.navigate("login")

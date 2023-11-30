@@ -126,12 +126,13 @@ class Task(DatabaseHandler):
         return task
 
     def update(self):
-        self_on_memory = [x for x in self.TASKS if x.id == self.id][0]
-        self_on_memory.column_id = self.column_id
-        self_on_memory.name = self.name
-        self_on_memory.moved = self.moved
-        self_on_memory.updated = self.updated
-        self_on_memory.created = self.created
+        task_on_memory = [x for x in Task.TASKS if x.id == self.id][0]
+        task_on_memory.column_id = self.column_id
+        task_on_memory.name = self.name
+        task_on_memory.moved = self.moved
+        task_on_memory.updated = self.updated
+        task_on_memory.created = self.created
+        task_on_memory.save_memory()
 
     @classmethod
     def get_tasks_from_column_id(cls, column_id: int) -> List['Task']:

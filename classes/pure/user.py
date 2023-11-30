@@ -2,6 +2,7 @@
 from typing import Optional
 
 from classes.database_handler import DatabaseHandler
+from exceptions import ExpectedException
 
 
 class User(DatabaseHandler):
@@ -63,6 +64,10 @@ class User(DatabaseHandler):
 
     @classmethod
     def create(cls, name: str, login: str, password: str):
+        # Verifico se já tem um usuário com o mesmo login
+        if cls.get_user_by_login(login):
+            raise ExpectedException("Já existe um usuário com esse login")
+
         user = {
             "id": len(cls.USERS),
             "name": name,

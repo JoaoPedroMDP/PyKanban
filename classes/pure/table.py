@@ -100,6 +100,7 @@ class Table(DatabaseHandler):
         next_position = current_column.position + direction
         if next_position >= len(self.columns) or next_position < 0:
             current_column.remove_task(task)
+            task.delete()
             return
 
         next_column: Column = self.get_column_by_position(next_position)
